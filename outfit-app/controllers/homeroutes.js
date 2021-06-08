@@ -3,7 +3,11 @@
 const router = require("express").Router();
 const { Outfits, User } = require("../models");
 const withAuth = require("../utils/auth"); 
+const fileUpload = require('express-fileupload');
 
+router.use(fileUpload({
+    useTempFiles : false
+}));
 
 // DISPLAY ALL OUTFITS ON HOMEPAGE
 
@@ -135,6 +139,18 @@ router.get("/outfits", withAuth, async (req, res) => {
     } catch (err) {
         res.status(500).json(err);
     }
+});
+
+router.post('/upload-file', (req, res) => {
+    
+    if (!req.files || Object.keys(req.files).length === 0) {
+        return res.status(400).send('No files were uploaded.');
+    }
+
+    // Accessing the file by the <input> File name="target_file"
+    let targetFile = req.files.image_name;
+    console.log(targetFile);
+
 });
 
 
