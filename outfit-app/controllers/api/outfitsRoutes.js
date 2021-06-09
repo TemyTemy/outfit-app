@@ -1,11 +1,13 @@
-const router = require("express").Router();
+const express = require("express"); 
+const app = express();
 const { Outfits } = require("../../models");
 const withAuth = require("../../utils/auth"); 
-
+const fileUpload = require('express-fileupload');
+app.use(fileUpload());
 
 
 // POST NEW OUTFIT
-router.post('/addoutfit', withAuth, async (req, res) => {
+app.post('/addoutfit', withAuth, async (req, res) => {
 console.log(req, "request data")
     try {
     const newOutfits = await Outfits.create({
@@ -22,7 +24,7 @@ console.log(req, "request data")
 
 // UPDATE AN OUTFIT BY ITS ID
 
-router.put("/:id", withAuth, async (req, res) => {
+app.put("/:id", withAuth, async (req, res) => {
     try {
         const updateOutfit = await Outfits.update({
             ...req.body,
@@ -38,7 +40,7 @@ router.put("/:id", withAuth, async (req, res) => {
 
 
 // DELETE AN OUTFIT BY ITS ID
-router.delete("/:id", withAuth, async (req, res) => {
+app.delete("/:id", withAuth, async (req, res) => {
     try {
         const outfitsData = await Outfits.destroy({
             where: {
@@ -58,9 +60,7 @@ router.delete("/:id", withAuth, async (req, res) => {
     }
 });
 
-
-
-module.exports = router;
+module.exports = app;
 
 
 
